@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasta Kayıt Sistemi</title>
+    <script src="patient.js"></script>
+    <link rel="stylesheet" href="patient.css">
+    <style>
+        * {
+     font-family: Arial, Helvetica, sans-serif;
+        }
+     input,button,select,label{
+      display: block;
+      margin:10px;
+    }
+    select,input {
+        width: 250px;
+    }
+    </style>
+</head>
+<body>
+    <h2>Hasta Kayıt Sistemi</h2>
+    <input type="text" id="fullName" placeholder="Lütfen ad soyad giriniz.">
+    <input type="text" id="idNo" placeholder="Lütfen TC Kimlik numaranızı giriniz.">
+    <label>Lütfen cinsiyet seçiniz:</label>
+    <select id="gender">
+        <option value="Erkek">Erkek</option>
+        <option value="Kadın">Kadın</option>
+        <option value="another">Belirtmek istemiyorum.</option>
+      </select>
+      <label>Lütfen bölüm seçiniz:</label>
+    <select id="department">
+        <option value="Kardiyoloji">Kardiyoloji</option>
+        <option value="Nöroloji">Nöroloji</option>
+        <option value="Dermatoloji">Dermatoloji</option>
+        <option value="Alerji">Alerji Hastalıkları</option>
+    </select>
+    <input type="text" id="age" placeholder="Lütfen yaşınızı giriniz.">
+    <input type="text" id="phone" placeholder="Lütfen telefon numaranızı giriniz.">  
+    <input type="email" id="email" placeholder="Lütfen mail adresinizi giriniz.">
+    <button id="registration">Hastayı Kaydet</button>
+    <hr>
+    <input type="text" id="deleteidNo" placeholder="Silinecek hasta TC kimlik no giriniz.">
+    <button id="delete">Hastayı Sil</button>
+    <hr>
+    <label>Aramayı neye göre yapmak istiyorsunuz?</label>
+    <select name="" id="searchKey">
+        <option value="fullName">Hastanın Adı</option>
+        <option value="idNo">Hastanın Kimlik Numarası</option>
+        <option value="gender">Hastanın Cinsiyeti</option>
+        <option value="department">Seçilen Bölüm</option>
+        <option value="age">Hastanın Yaşı</option>
+        <option value="phone">Hastanın Telefon Numarası</option>
+        <option value="email">Hastanın Mail Adresi</option>
+    </select>
+    <input type="text" id="searchValue" placeholder="Aramak istediğiniz değeri giriniz."  style="width:250px">
+    <button id="search">Hasta Ara</button>
+    <hr>
+    <input type="text" id="idToUpdate" placeholder="Bilgisi güncellenecek hastanın kimlik numarasını giriniz">
+    <label>Hastanın hangi bilgisini güncellemek istiyorsunuz?</label>
+    <select name="" id="key">
+        <option value="fullName">Hastanın Adı</option>
+        <option value="gender">Hastanın Cinsiyeti</option>
+        <option value="department">Seçilen Bölüm</option>
+        <option value="age">Hastanın Yaşı</option>
+        <option value="phone">Hastanın Telefon Numarası</option>
+        <option value="email">Hastanın Mail Adresi</option>
+    </select>
+    <input type="text" id="value" placeholder="Güncel değeri giriniz.">
+    <button id="update">Hasta Bilgilerini Güncelle</button>
+    <hr>
+    <button id="list">Sistemde Kayıtlı Hastaları Listele</button>
+    <script>
+        var regButton = document.querySelector("#registration");
+        regButton.addEventListener("click", function () {
+            try {
+                var pt = {
+                    "fullName":document.getElementById("fullName").value,
+                    "idNo":document.getElementById("idNo").value,
+                    "gender":document.getElementById("gender").value,
+                    "department":document.getElementById("department").value,
+                    "age":document.getElementById("age").value,
+                    "phone":document.getElementById("phone").value,
+                    "email":document.getElementById("email").value
+                }
+                var patient = new Patient();
+                patient.ekle(pt);
+
+        } catch (error) {
+               console.log(error);
+                alert("Hasta kaydederken bir hata oluştu, lütfen daha sonra tekrar deneyiniz.")
+            }
+        });
+        var deleteButton = document.querySelector("#delete");
+        deleteButton.addEventListener("click", function () {
+            try {
+                var pt = new Patient();
+                pt.sil(document.getElementById("deleteidNo").value);
+            } catch (error) {
+                console.log(error);
+                alert("Hasta silerken bir hata oluştu, lütfen daha sonra tekrar deneyiniz.")
+            }
+        });
+        var searchButton = document.querySelector("#search");
+        searchButton.addEventListener("click", function () {
+            try {
+            var searchKey = document.getElementById("searchKey").value;
+            var searchVal = document.getElementById("searchValue").value;
+            var pt = new Patient();
+            var ptn = pt.ara(searchKey,searchVal);
+            } catch (error) {
+                console.log(error);
+                alert("Hasta ararken bir hata oluştu, lütfen daha sonra tekrar deneyiniz.")
+            }
+        });
+        var updateButton = document.querySelector("#update");
+        updateButton.addEventListener("click", function () {
+            try {
+        var ptId = document.querySelector("#idToUpdate").value;
+        var key = document.getElementById("key").value;
+        var val = document.getElementById("value").value;
+        var pt = new Patient();
+        pt.guncelle(ptId, key, val);
+            } catch (error) {
+                console.log(error);
+                alert("Hasta güncellerken bir hata oluştu, lütfen daha sonra tekrar deneyiniz.")
+            }
+        })
+        var listButton = document.querySelector("#list");
+        listButton.addEventListener("click", function() {
+            try {
+            var pt = new Patient();
+            pt.listele();
+            } catch (error) {
+                console.log(error);
+                alert("Hastaları listelerken bir hata oluştu, lütfen daha sonra tekrar deneyiniz.")
+            }
+        })
+    </script>
+</body>
+</html>
